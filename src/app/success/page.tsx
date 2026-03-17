@@ -20,7 +20,11 @@ const SKILL_NAMES: Record<string, string> = {
   "billing": "Invoice & Billing Automation",
   "support": "Customer Support Triage",
   "bundle": "All Skills Bundle",
+  "jobber-core": "Jobber MCP Server — Core",
+  "jobber-pro": "Jobber MCP Server — Pro",
 };
+
+const MCP_PRODUCTS = new Set(["jobber-core", "jobber-pro"]);
 
 function deriveKey(sessionId: string): string {
   // Deterministic key from session ID — for MVP, the session ID IS the proof of payment
@@ -56,6 +60,7 @@ function SuccessContent() {
 
   const licenseKey = sessionId ? deriveKey(sessionId) : null;
   const files = skillId ? (SKILL_FILES[skillId] || []) : [];
+  const isMcpProduct = skillId ? MCP_PRODUCTS.has(skillId) : false;
 
   function copyKey() {
     if (licenseKey) {
@@ -144,7 +149,61 @@ function SuccessContent() {
         </div>
       )}
 
-      {/* Install instructions */}
+      {/* Install instructions — MCP products */}
+      {isMcpProduct && (
+        <div className="bg-orange-500/5 border border-orange-500/20 rounded-2xl p-6 mb-6">
+          <h2 className="text-white font-semibold mb-4">Setup Instructions</h2>
+          <div className="space-y-4 text-sm text-white/70">
+            <div className="flex gap-3">
+              <span className="text-orange-400 font-bold shrink-0">1.</span>
+              <div>
+                <p className="text-white/90 font-medium">Install the package</p>
+                <code className="bg-black/40 text-emerald-400 font-mono text-xs block mt-1 px-3 py-2 rounded-lg">
+                  npm install -g @ringomcp/jobber
+                </code>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-orange-400 font-bold shrink-0">2.</span>
+              <div>
+                <p className="text-white/90 font-medium">Add to Claude Desktop config</p>
+                <code className="bg-black/40 text-emerald-400 font-mono text-xs block mt-1 px-3 py-2 rounded-lg whitespace-pre">{`{
+  "mcpServers": {
+    "jobber": {
+      "command": "mcp-jobber",
+      "env": {
+        "JOBBER_ACCESS_TOKEN": "your_token"
+      }
+    }
+  }
+}`}</code>
+              </div>
+            </div>
+            {skillId === "jobber-pro" && (
+              <div className="flex gap-3">
+                <span className="text-orange-400 font-bold shrink-0">3.</span>
+                <div>
+                  <p className="text-white/90 font-medium">Add NVIDIA NIM key (Pro AI features)</p>
+                  <code className="bg-black/40 text-emerald-400 font-mono text-xs block mt-1 px-3 py-2 rounded-lg">
+                    NIM_API_KEY=&quot;your_nim_key&quot;
+                  </code>
+                  <p className="text-white/40 text-xs mt-1">Free tier at build.nvidia.com — no credit card needed.</p>
+                </div>
+              </div>
+            )}
+            <div className="flex gap-3">
+              <span className="text-orange-400 font-bold shrink-0">{skillId === "jobber-pro" ? "4" : "3"}.</span>
+              <div>
+                <p className="text-white/90 font-medium">Get your Jobber API token</p>
+                <p className="text-white/50 text-xs mt-1">Go to developer.getjobber.com, create an app, and copy your access token.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Install instructions — Skill products */}
+      {!isMcpProduct && (
       <div className="bg-violet-500/5 border border-violet-500/20 rounded-2xl p-6 mb-6">
         <h2 className="text-white font-semibold mb-4">Install Instructions</h2>
         <div className="space-y-3 text-sm text-white/70">
@@ -177,6 +236,7 @@ function SuccessContent() {
           </div>
         </div>
       </div>
+      )}
 
       <div className="text-center">
         <p className="text-white/30 text-sm mb-4">

@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile, readFile, mkdir } from "fs/promises";
 import { join } from "path";
 
-const WAITLIST_FILE = join(process.cwd(), "data", "waitlist.json");
+// Use /tmp for Vercel serverless compatibility (writable at runtime)
+const WAITLIST_FILE = join("/tmp", "waitlist.json");
 
 interface WaitlistEntry {
   email: string;
@@ -21,7 +22,7 @@ async function readWaitlist(): Promise<WaitlistEntry[]> {
 }
 
 async function saveWaitlist(entries: WaitlistEntry[]): Promise<void> {
-  await mkdir(join(process.cwd(), "data"), { recursive: true });
+  await mkdir("/tmp", { recursive: true });
   await writeFile(WAITLIST_FILE, JSON.stringify(entries, null, 2));
 }
 

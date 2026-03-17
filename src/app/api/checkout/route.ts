@@ -13,6 +13,9 @@ const SKILL_PRICES: Record<string, { name: string; price: number }> = {
   "billing": { name: "Invoice & Billing Automation Skill", price: 1400 },
   "support": { name: "Customer Support Triage Skill", price: 1900 },
   "bundle": { name: "All Skills Bundle", price: 4900 },
+  // MCP Server products
+  "jobber-core": { name: "Jobber MCP Server — Core", price: 4900 },
+  "jobber-pro": { name: "Jobber MCP Server — Pro (with AI)", price: 9900 },
 };
 
 export async function POST(req: NextRequest) {
