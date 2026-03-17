@@ -7,11 +7,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 // Skill product config — replace price IDs once created in Stripe dashboard
 const SKILL_PRICES: Record<string, { name: string; price: number }> = {
-  "lead-gen": { name: "Lead Gen & CRM Automation Skill", price: 900 },
+  "lead-gen": { name: "Lead Gen & CRM Automation Skill", price: 2400 },
   "social": { name: "Social Media Pipeline Skill", price: 1400 },
-  "seo": { name: "SEO Audit & Optimization Skill", price: 900 },
-  "billing": { name: "Invoice & Billing Automation Skill", price: 900 },
-  "support": { name: "Customer Support Triage Skill", price: 900 },
+  "seo": { name: "SEO Audit & Optimization Skill", price: 1900 },
+  "billing": { name: "Invoice & Billing Automation Skill", price: 1400 },
+  "support": { name: "Customer Support Triage Skill", price: 1900 },
   "bundle": { name: "All Skills Bundle", price: 4900 },
 };
 

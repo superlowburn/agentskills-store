@@ -8,9 +8,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 const ALLOWED_FILES = new Set([
   "lead-gen.md",
   "social-media.md",
-  "seo-audit.md",
-  "billing-automation.md",
-  "support-triage.md",
+  "seo-content-agent.md",
+  "invoice-billing.md",
+  "customer-support.md",
 ]);
 
 // Verify the session is paid and active

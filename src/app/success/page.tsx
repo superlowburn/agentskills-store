@@ -7,10 +7,10 @@ import Link from "next/link";
 const SKILL_FILES: Record<string, string[]> = {
   "lead-gen": ["lead-gen.md"],
   "social": ["social-media.md"],
-  "seo": ["seo-audit.md"],
-  "billing": ["billing-automation.md"],
-  "support": ["support-triage.md"],
-  "bundle": ["lead-gen.md", "social-media.md", "seo-audit.md", "billing-automation.md", "support-triage.md"],
+  "seo": ["seo-content-agent.md"],
+  "billing": ["invoice-billing.md"],
+  "support": ["customer-support.md"],
+  "bundle": ["lead-gen.md", "social-media.md", "seo-content-agent.md", "invoice-billing.md", "customer-support.md"],
 };
 
 const SKILL_NAMES: Record<string, string> = {

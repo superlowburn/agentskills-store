@@ -17,7 +17,7 @@ const SKILLS = [
       "Personalized outreach generation",
       "Engagement tracking dashboard",
     ],
-    price: 9,
+    price: 24,
     popular: false,
     color: "from-violet-600 to-purple-600",
     badge: null,
@@ -74,7 +74,7 @@ const SKILLS = [
       "Meta tag & schema auto-writer",
       "Backlink opportunity finder",
     ],
-    price: 9,
+    price: 19,
     popular: false,
     color: "from-emerald-500 to-teal-600",
     badge: null,
@@ -93,7 +93,7 @@ const SKILLS = [
       "Revenue reporting & forecasting",
       "Multi-currency support",
     ],
-    price: 9,
+    price: 14,
     popular: false,
     color: "from-yellow-500 to-orange-500",
     badge: null,
@@ -112,7 +112,7 @@ const SKILLS = [
       "Sentiment analysis & churn detection",
       "Weekly insights reports",
     ],
-    price: 9,
+    price: 19,
     popular: false,
     color: "from-rose-500 to-red-600",
     badge: null,
@@ -300,7 +300,7 @@ export default function Home() {
               href="#pricing"
               className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all shadow-lg shadow-violet-500/25"
             >
-              Browse Skills — from $9/mo
+              Browse Skills — from $14/mo
             </a>
             <a
               href="#skills"
@@ -385,7 +385,7 @@ export default function Home() {
               Simple, transparent pricing
             </h2>
             <p className="text-white/50 text-lg max-w-xl mx-auto">
-              $9/mo per skill or $49/mo for everything — including every skill we ship this year.
+              $14–24/mo per skill or $49/mo for everything — including every skill we ship this year.
             </p>
           </div>
 
@@ -464,7 +464,7 @@ export default function Home() {
               href="#pricing"
               className="inline-block bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all shadow-lg shadow-violet-500/25"
             >
-              Get Started — $9/mo
+              Get Started — from $14/mo
             </a>
           </div>
         </div>
