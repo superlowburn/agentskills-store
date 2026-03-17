@@ -135,11 +135,11 @@ const FAQS = [
   },
   {
     q: "Do I get updates?",
-    a: "Yes. Early access members get all future versions of the skills they signed up for. Bundle buyers get every new skill we ship, automatically.",
+    a: "Yes. Subscribers get all future versions of the skills they signed up for. Bundle subscribers get every new skill we ship, automatically.",
   },
   {
-    q: "When does it launch?",
-    a: "We're collecting early access signups now and will notify you when we go live. Early access members get a special founding discount.",
+    q: "Is this available now?",
+    a: "Yes — skills are available immediately. Subscribe, complete checkout via Stripe, and you'll get a download link and license key on the spot.",
   },
   {
     q: "Can I use these commercially?",
@@ -149,29 +149,14 @@ const FAQS = [
 
 function PriceCard({
   skill,
-  onInterest,
+  onCheckout,
   submitting,
-  submitted,
 }: {
   skill: (typeof SKILLS)[0];
-  onInterest: (skillId: string, email: string) => Promise<void>;
+  onCheckout: (skillId: string) => Promise<void>;
   submitting: string | null;
-  submitted: Set<string>;
 }) {
-  const [email, setEmail] = useState("");
-  const [localError, setLocalError] = useState("");
   const isSubmitting = submitting === skill.id;
-  const isDone = submitted.has(skill.id);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLocalError("");
-    if (!email || !email.includes("@")) {
-      setLocalError("Enter a valid email");
-      return;
-    }
-    await onInterest(skill.id, email);
-  }
 
   return (
     <div
@@ -212,55 +197,33 @@ function PriceCard({
         <div className="flex items-baseline gap-1 mb-4">
           <span className="text-3xl font-bold text-white">${skill.price}</span>
           <span className="text-white/50">/mo</span>
-          <span className="ml-2 text-xs text-white/30 font-medium uppercase tracking-wide">at launch</span>
+          <span className="ml-2 text-xs text-emerald-400/70 font-medium uppercase tracking-wide">live now</span>
         </div>
 
-        {isDone ? (
-          <div className={`w-full py-3 rounded-xl text-sm font-semibold text-center ${
+        <button
+          onClick={() => {
+            track("checkout_click", { skill: skill.id, price: skill.price, skillName: skill.name });
+            onCheckout(skill.id);
+          }}
+          disabled={isSubmitting}
+          className={`w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
             skill.popular
-              ? "bg-orange-500/20 border border-orange-500/40 text-orange-300"
-              : "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300"
-          }`}>
-            You&apos;re on the list!
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-2">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onFocus={() => {
-                track("tier_click", { skill: skill.id, price: skill.price, skillName: skill.name });
-              }}
-              placeholder="your@email.com"
-              className="w-full px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/8 transition-all"
-            />
-            {localError && (
-              <p className="text-red-400 text-xs">{localError}</p>
-            )}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
-                skill.popular
-                  ? "bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-400 hover:to-pink-500 text-white shadow-lg shadow-orange-500/25"
-                  : "bg-white/10 hover:bg-white/20 text-white border border-white/10"
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
-            >
-              {isSubmitting ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                  Joining...
-                </span>
-              ) : (
-                `Get Early Access — $${skill.price}/mo`
-              )}
-            </button>
-          </form>
-        )}
+              ? "bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-400 hover:to-pink-500 text-white shadow-lg shadow-orange-500/25"
+              : "bg-white/10 hover:bg-white/20 text-white border border-white/10"
+          } disabled:opacity-50 disabled:cursor-not-allowed`}
+        >
+          {isSubmitting ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              Loading...
+            </span>
+          ) : (
+            `Subscribe — $${skill.price}/mo`
+          )}
+        </button>
       </div>
     </div>
   );
@@ -268,35 +231,28 @@ function PriceCard({
 
 export default function Home() {
   const [submitting, setSubmitting] = useState<string | null>(null);
-  const [submitted, setSubmitted] = useState<Set<string>>(new Set());
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  async function handleInterest(skillId: string, email: string) {
+  async function handleCheckout(skillId: string) {
     setSubmitting(skillId);
     setGlobalError(null);
     try {
-      track("waitlist_signup", {
-        skill: skillId,
-        price: SKILLS.find((s) => s.id === skillId)?.price ?? 0,
-        skillName: SKILLS.find((s) => s.id === skillId)?.name ?? skillId,
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ skillId }),
       });
-      // Try backend first; fall back to client-side success for static/preview deployments
-      try {
-        const res = await fetch("/api/waitlist", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, product: skillId, source: "landing" }),
-        });
-        if (!res.ok) throw new Error("api unavailable");
-      } catch {
-        // Swallow — preview/static deployment; email not persisted server-side
-        console.info("Waitlist signup (client-only):", email, skillId);
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to start checkout");
       }
-      setSubmitted((prev) => new Set([...prev, skillId]));
+      const { url } = await res.json();
+      if (url) {
+        window.location.href = url;
+      }
     } catch (err) {
       setGlobalError(err instanceof Error ? err.message : "Something went wrong");
-    } finally {
       setSubmitting(null);
     }
   }
@@ -319,15 +275,15 @@ export default function Home() {
             href="#pricing"
             className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all"
           >
-            Get Early Access
+            Subscribe Now
           </a>
         </div>
       </nav>
 
-      {/* Early Access Banner */}
-      <div className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-violet-900/80 to-purple-900/80 border-b border-violet-500/20 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 py-2 text-center text-sm text-violet-200">
-          <span className="font-semibold">Early Access</span> — Sign up for your preferred tier and get notified at launch with a founding discount.
+      {/* Live Banner */}
+      <div className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-emerald-900/80 to-teal-900/80 border-b border-emerald-500/20 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 py-2 text-center text-sm text-emerald-200">
+          <span className="font-semibold">Now Live</span> — Subscribe instantly and get immediate access to your skills.
         </div>
       </div>
 
@@ -340,9 +296,9 @@ export default function Home() {
         </div>
 
         <div className="relative max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 rounded-full px-4 py-1.5 text-sm text-violet-300 mb-6">
-            <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse" />
-            Coming soon — 5 premium skills
+          <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-1.5 text-sm text-emerald-300 mb-6">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            Live now — 5 premium skills available
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
@@ -363,7 +319,7 @@ export default function Home() {
               href="#pricing"
               className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all shadow-lg shadow-violet-500/25"
             >
-              Get Early Access — from $14/mo
+              Subscribe Now — from $14/mo
             </a>
             <a
               href="#skills"
@@ -407,8 +363,8 @@ export default function Home() {
             {[
               {
                 step: "01",
-                title: "Get early access",
-                desc: "Sign up for your preferred tier. You'll be first to know at launch and lock in the founding discount.",
+                title: "Subscribe",
+                desc: "Pick your skill and subscribe via Stripe. You get instant access and can cancel anytime.",
                 icon: "🔔",
               },
               {
@@ -450,8 +406,8 @@ export default function Home() {
             <p className="text-white/50 text-lg max-w-xl mx-auto">
               $14–24/mo per skill or $49/mo for everything — including every skill we ship this year.
             </p>
-            <p className="text-violet-400 text-sm mt-3">
-              Sign up for early access and get a founding discount when we launch.
+            <p className="text-emerald-400 text-sm mt-3">
+              Subscribe now. Instant access. Cancel anytime.
             </p>
           </div>
 
@@ -466,15 +422,14 @@ export default function Home() {
               <PriceCard
                 key={skill.id}
                 skill={skill}
-                onInterest={handleInterest}
+                onCheckout={handleCheckout}
                 submitting={submitting}
-                submitted={submitted}
               />
             ))}
           </div>
 
           <p className="text-center text-white/30 text-sm mt-8">
-            Early access signup — no payment required. We&apos;ll notify you at launch.
+            Monthly subscription — cancel anytime. Powered by Stripe.
           </p>
         </div>
       </section>
@@ -525,13 +480,13 @@ export default function Home() {
               Ready to ship faster?
             </h2>
             <p className="text-white/60 mb-8 leading-relaxed">
-              Join builders getting early access to agent skills. Lock in the founding discount before we launch.
+              Give your AI agent professional-grade skills. Subscribe today and start shipping faster.
             </p>
             <a
               href="#pricing"
               className="inline-block bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all shadow-lg shadow-violet-500/25"
             >
-              Get Early Access — from $14/mo
+              Subscribe Now — from $14/mo
             </a>
           </div>
         </div>
