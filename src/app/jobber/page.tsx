@@ -636,12 +636,12 @@ export default function JobberPage() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/30">
           <div className="flex items-center gap-2">
             <span>🔧</span>
-            <span>Jobber MCP by AgentSkills</span>
+            <span>Jobber MCP by Automadic</span>
           </div>
           <div className="flex items-center gap-6">
             <a href="/" className="hover:text-white/60 transition-colors">All Skills</a>
-            <a href="mailto:support@agentskills.ai" className="hover:text-white/60 transition-colors">Support</a>
-            <span>© 2026 AgentSkills</span>
+            <a href="mailto:support@automadic.ai" className="hover:text-white/60 transition-colors">Support</a>
+            <span>© 2026 Automadic</span>
           </div>
         </div>
       </footer>

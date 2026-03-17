@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AgentSkills — Premium Agent Skills for Claude Code, Cursor & Codex",
+  title: "Automadic — Premium Agent Skills for Claude Code, Cursor & Codex",
   description: "Ship faster with battle-tested agent skills. Lead gen, CRM automation, social media, SEO, billing — premium skills for serious builders.",
   keywords: "agent skills, Claude Code, Cursor, Codex, AI automation, lead generation, CRM",
   openGraph: {
-    title: "AgentSkills — Premium Agent Skills",
+    title: "Automadic — Premium Agent Skills",
     description: "Ship faster with battle-tested agent skills for Claude Code, Cursor & Codex.",
     type: "website",
   },

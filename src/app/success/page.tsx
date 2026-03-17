@@ -241,15 +241,15 @@ function SuccessContent() {
       <div className="text-center">
         <p className="text-white/30 text-sm mb-4">
           Questions? Email{" "}
-          <a href="mailto:support@agentskills.ai" className="text-violet-400 hover:text-violet-300 transition-colors">
-            support@agentskills.ai
+          <a href="mailto:support@automadic.ai" className="text-violet-400 hover:text-violet-300 transition-colors">
+            support@automadic.ai
           </a>
         </p>
         <Link
           href="/"
           className="text-white/40 hover:text-white/70 text-sm transition-colors"
         >
-          ← Back to AgentSkills
+          ← Back to Automadic
         </Link>
       </div>
     </div>
@@ -263,7 +263,7 @@ export default function SuccessPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl">⚡</span>
-            <span className="font-bold text-white">AgentSkills</span>
+            <span className="font-bold text-white">Automadic</span>
           </Link>
         </div>
       </nav>

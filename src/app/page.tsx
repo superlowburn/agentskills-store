@@ -308,7 +308,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
             <span className="text-xl">⚡</span>
-            <span className="font-bold text-white">AgentSkills</span>
+            <span className="font-bold text-white">Automadic</span>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm text-white/60">
             <a href="#skills" className="hover:text-white transition-colors">Skills</a>
@@ -542,13 +542,13 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/30">
           <div className="flex items-center gap-2">
             <span>⚡</span>
-            <span>AgentSkills</span>
+            <span>Automadic</span>
           </div>
           <div className="flex items-center gap-6">
-            <a href="mailto:support@agentskills.ai" className="hover:text-white/60 transition-colors">
+            <a href="mailto:support@automadic.ai" className="hover:text-white/60 transition-colors">
               Support
             </a>
-            <span>© 2026 AgentSkills</span>
+            <span>© 2026 Automadic</span>
           </div>
         </div>
       </footer>
