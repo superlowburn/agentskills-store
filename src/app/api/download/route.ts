@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { getStripe } from "@/lib/stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-02-25.clover",
-});
 
 const ALLOWED_FILES = new Set([
   "lead-gen.md",
@@ -16,7 +14,7 @@ const ALLOWED_FILES = new Set([
 // Verify the session is paid and active
 async function verifySession(sessionId: string): Promise<boolean> {
   try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const session = await getStripe().checkout.sessions.retrieve(sessionId);
     return session.payment_status === "paid";
   } catch {
     return false;

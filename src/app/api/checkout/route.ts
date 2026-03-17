@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-02-25.clover",
-});
+import { getStripe } from "@/lib/stripe";
 
 // Skill product config — replace price IDs once created in Stripe dashboard
 const SKILL_PRICES: Record<string, { name: string; price: number }> = {
@@ -29,7 +25,7 @@ export async function POST(req: NextRequest) {
 
     const baseUrl = process.env.NEXT_PUBLIC_URL || req.nextUrl.origin;
 
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "subscription",
       line_items: [
