@@ -47,18 +47,18 @@ const SKILLS = [
     name: "Social Media Pipeline",
     tagline: "Content at agent speed",
     description:
-      "Turn any URL, transcript, or idea into a full week of social content. Repurpose to LinkedIn, Twitter/X, Instagram, and TikTok in one command. Schedules posts via Buffer or Hypefury.",
+      "Turn any URL, transcript, or idea into a full week of social content. Repurpose to LinkedIn, Twitter/X, and Instagram in one command. Schedules posts via Buffer API.",
     features: [
-      "Content repurposing from any source",
-      "Platform-native voice adaptation",
-      "Buffer & Hypefury scheduling",
-      "Hashtag research & optimization",
-      "Viral hook generator",
+      "Weekly/monthly content calendar generation",
+      "Platform-native posts for LinkedIn, X & Instagram",
+      "Hashtag research & tiered optimization",
+      "Long-form to multi-platform repurposing",
+      "Buffer API scheduling + engagement analytics",
     ],
-    price: 9,
+    price: 14,
     popular: false,
     color: "from-cyan-500 to-blue-600",
-    badge: null,
+    badge: "New",
   },
   {
     id: "seo",
@@ -292,7 +292,7 @@ export default function Home() {
 
           <p className="text-xl text-white/60 max-w-2xl mx-auto mb-10 leading-relaxed">
             Premium skills for Claude Code, Cursor &amp; Codex. Drop one file, unlock
-            professional-grade automation — lead gen, social media, SEO, billing, support.
+            professional-grade automation — social media pipelines, lead gen, SEO, billing, support.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
