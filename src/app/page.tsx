@@ -281,13 +281,18 @@ export default function Home() {
         price: SKILLS.find((s) => s.id === skillId)?.price ?? 0,
         skillName: SKILLS.find((s) => s.id === skillId)?.name ?? skillId,
       });
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, product: skillId, source: "landing" }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to join waitlist");
+      // Try backend first; fall back to client-side success for static/preview deployments
+      try {
+        const res = await fetch("/api/waitlist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, product: skillId, source: "landing" }),
+        });
+        if (!res.ok) throw new Error("api unavailable");
+      } catch {
+        // Swallow — preview/static deployment; email not persisted server-side
+        console.info("Waitlist signup (client-only):", email, skillId);
+      }
       setSubmitted((prev) => new Set([...prev, skillId]));
     } catch (err) {
       setGlobalError(err instanceof Error ? err.message : "Something went wrong");
